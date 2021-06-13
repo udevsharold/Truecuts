@@ -19,6 +19,7 @@
 %end
 
 %hook VCUserNotificationManager
--(BOOL)_postNotificationOfType:(unsigned long long)type forTrigger:(id)arg2 workflowReference:(id)arg3 removeDeliveredNotifications:(BOOL)arg4 pendingTriggerEventIDs:(id)arg5 actionIcons:(id)arg6 error:(id*)arg7{    return type == 1 ? YES : %orig; // type 1 = automation
+-(BOOL)_postNotificationOfType:(unsigned long long)type forTrigger:(id)arg2 workflowReference:(id)arg3 removeDeliveredNotifications:(BOOL)arg4 pendingTriggerEventIDs:(id)arg5 actionIcons:(id)arg6 error:(id*)arg7{
+    return type == 1 ? YES : %orig; // type 1 = automation
 }
 %end
