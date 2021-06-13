@@ -1,4 +1,3 @@
-%group ShortcutsGroup
 @interface WFTrigger : NSObject
 +(BOOL)isAllowedToRunAutomatically;
 @end
@@ -18,30 +17,8 @@
     return YES;
 }
 %end
-%end //ShortcutsGroup
 
-%group AutomationNotificationGroup
 %hook VCUserNotificationManager
--(BOOL)_postNotificationOfType:(unsigned long long)arg1 forTrigger:(id)arg2 workflowReference:(id)arg3 removeDeliveredNotifications:(BOOL)arg4 pendingTriggerEventIDs:(id)arg5 actionIcons:(id)arg6 error:(id*)arg7{    return YES;
+-(BOOL)_postNotificationOfType:(unsigned long long)type forTrigger:(id)arg2 workflowReference:(id)arg3 removeDeliveredNotifications:(BOOL)arg4 pendingTriggerEventIDs:(id)arg5 actionIcons:(id)arg6 error:(id*)arg7{    return type == 1 ? YES : %orig; // type 1 = automation
 }
 %end
-%end //AutomationNotificationGroup
-
-%ctor {
-    @autoreleasepool {
-        NSArray *args = [[NSClassFromString(@"NSProcessInfo") processInfo] arguments];
-        
-        if (args.count != 0) {
-            NSString *executablePath = args[0];
-            
-            if (executablePath) {
-                NSString *processName = [executablePath lastPathComponent];
-                if ([processName isEqualToString:@"siriactionsd"]){
-                    %init(AutomationNotificationGroup);
-                }else{
-                    %init(ShortcutsGroup);
-                }
-            }
-        }
-    }
-}
